@@ -31,7 +31,6 @@ class PageLoadingCommand : public Command {
     WebPageManager *m_manager;
     Command *m_command;
     Response *m_pendingResponse;
-    bool m_pageSuccess;
     bool m_pageLoadingFromCommand;
 };
 

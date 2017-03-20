@@ -8,7 +8,6 @@ PageLoadingCommand::PageLoadingCommand(Command *command, WebPageManager *manager
   m_manager = manager;
   m_command = command;
   m_pageLoadingFromCommand = false;
-  m_pageSuccess = true;
   m_pendingResponse = NULL;
   m_command->setParent(this);
 }
@@ -22,12 +21,11 @@ void PageLoadingCommand::start() {
 };
 
 void PageLoadingCommand::pendingLoadFinished(bool success) {
-  m_pageSuccess = success;
   if (m_pageLoadingFromCommand) {
     m_pageLoadingFromCommand = false;
     if (m_pendingResponse) {
       m_manager->logger() << "Page load from command finished";
-      if (m_pageSuccess) {
+      if (success) {
         emit finished(m_pendingResponse);
       } else {
         QString message = m_manager->currentPage()->failureString();
