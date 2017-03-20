@@ -1,4 +1,4 @@
-#include "Command.h"
+#include "SocketCommand.h"
 #include <QObject>
 #include <QStringList>
 
@@ -18,7 +18,7 @@ class TimeoutCommand : public Command {
   Q_OBJECT
  
   public:
-   TimeoutCommand(Command *command, WebPageManager *page, QObject *parent = 0);
+   TimeoutCommand(SocketCommand *command, WebPageManager *page, QObject *parent = 0);
   virtual void start();
 
   public slots:

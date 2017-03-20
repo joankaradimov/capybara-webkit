@@ -3,7 +3,8 @@
 
 class QTcpSocket;
 class WebPage;
-class Command;
+class SocketCommand;
+class TimeoutCommand;
 class Response;
 class CommandParser;
 class CommandFactory;
@@ -17,12 +18,12 @@ class Connection : public QObject {
     Connection(QTcpSocket *socket, WebPageManager *manager, QObject *parent = 0);
 
   public slots:
-    void commandReady(Command *command);
+    void commandReady(SocketCommand *command);
     void finishCommand(Response *response);
     void pendingLoadFinished(bool success);
 
   private:
-    void startCommand(Command *);
+    void startCommand(SocketCommand *);
     void writeResponse(Response *response);
     void writePageLoadFailure();
 
@@ -32,6 +33,6 @@ class Connection : public QObject {
     CommandFactory *m_commandFactory;
     bool m_pageSuccess;
     WebPage *currentPage();
-    Command *m_pendingCommand;
+    TimeoutCommand *m_pendingCommand;
 };
 

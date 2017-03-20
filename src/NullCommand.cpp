@@ -2,8 +2,9 @@
 #include "WebPage.h"
 #include "WebPageManager.h"
 #include "ErrorMessage.h"
+#include "SocketCommand.h"
 
-NullCommand::NullCommand(QString name, QObject *parent) : Command(parent) {
+NullCommand::NullCommand(WebPageManager* manager, QString name, QStringList &arguments, QObject *parent) : SocketCommand(manager, arguments, parent) {
   m_name = name;
 }
 

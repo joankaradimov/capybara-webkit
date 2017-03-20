@@ -18,16 +18,16 @@ Connection::Connection(QTcpSocket *socket, WebPageManager *manager, QObject *par
   m_pageSuccess = true;
   m_pendingCommand = NULL;
   connect(m_socket, SIGNAL(readyRead()), m_commandParser, SLOT(checkNext()));
-  connect(m_commandParser, SIGNAL(commandReady(Command *)), this, SLOT(commandReady(Command *)));
+  connect(m_commandParser, SIGNAL(commandReady(SocketCommand *)), this, SLOT(commandReady(SocketCommand *)));
   connect(m_manager, SIGNAL(pageFinished(bool)), this, SLOT(pendingLoadFinished(bool)));
 }
 
-void Connection::commandReady(Command *command) {
+void Connection::commandReady(SocketCommand *command) {
   m_manager->logger() << "Received" << command->toString();
   startCommand(command);
 }
 
-void Connection::startCommand(Command *command) {
+void Connection::startCommand(SocketCommand *command) {
   if (m_pendingCommand) {
     m_pendingCommand->deleteLater();
   }

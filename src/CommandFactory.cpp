@@ -56,7 +56,7 @@ CommandFactory::CommandFactory(WebPageManager *manager, QObject *parent) : QObje
   m_manager = manager;
 }
 
-Command *CommandFactory::createCommand(const char *name, QStringList &arguments) {
+SocketCommand *CommandFactory::createCommand(const char *name, QStringList &arguments) {
   #include "find_command.h"
-  return new NullCommand(QString(name));
+  return new NullCommand(m_manager, QString(name), arguments, this);
 }

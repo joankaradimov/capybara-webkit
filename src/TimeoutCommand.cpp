@@ -1,12 +1,12 @@
 #include "TimeoutCommand.h"
-#include "Command.h"
+#include "SocketCommand.h"
 #include "WebPageManager.h"
 #include "WebPage.h"
 #include "ErrorMessage.h"
 #include <QTimer>
 #include <QApplication>
 
-TimeoutCommand::TimeoutCommand(Command *command, WebPageManager *manager, QObject *parent) : Command(parent) {
+TimeoutCommand::TimeoutCommand(SocketCommand *command, WebPageManager *manager, QObject *parent) : Command(parent) {
   m_command = command;
   m_pageLoadingFromCommand = false;
   m_pendingResponse = NULL;

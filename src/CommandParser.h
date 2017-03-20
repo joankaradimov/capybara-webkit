@@ -3,7 +3,7 @@
 
 class QIODevice;
 class CommandFactory;
-class Command;
+class SocketCommand;
 
 class CommandParser : public QObject {
   Q_OBJECT
@@ -15,7 +15,7 @@ class CommandParser : public QObject {
     void checkNext();
 
   signals:
-    void commandReady(Command *command);
+    void commandReady(SocketCommand *command);
 
   private:
     void readLine();

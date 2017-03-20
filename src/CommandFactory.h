@@ -1,6 +1,6 @@
 #include <QObject>
 
-class Command;
+class SocketCommand;
 class WebPage;
 class WebPageManager;
 
@@ -9,7 +9,7 @@ class CommandFactory : public QObject {
 
   public:
     CommandFactory(WebPageManager *, QObject *parent = 0);
-    Command *createCommand(const char *name, QStringList &arguments);
+    SocketCommand *createCommand(const char *name, QStringList &arguments);
 
   private:
     WebPageManager *m_manager;
