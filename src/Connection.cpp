@@ -3,7 +3,6 @@
 #include "WebPageManager.h"
 #include "CommandParser.h"
 #include "CommandFactory.h"
-#include "PageLoadingCommand.h"
 #include "TimeoutCommand.h"
 #include "SocketCommand.h"
 #include "ErrorMessage.h"
@@ -33,7 +32,7 @@ void Connection::startCommand(Command *command) {
     m_pendingCommand->deleteLater();
   }
   if (m_pageSuccess) {
-    m_pendingCommand = new TimeoutCommand(new PageLoadingCommand(command, m_manager, this), m_manager, this);
+    m_pendingCommand = new TimeoutCommand(command, m_manager, this);
     connect(m_pendingCommand, SIGNAL(finished(Response *)), this, SLOT(finishCommand(Response *)));
     m_pendingCommand->start();
   } else {

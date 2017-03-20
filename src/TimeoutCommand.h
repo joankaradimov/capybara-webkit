@@ -4,6 +4,7 @@
 
 class Response;
 class WebPageManager;
+class PageLoadingCommand;
 class QTimer;
 
 /* Decorates a command with a timeout.
@@ -25,6 +26,9 @@ class TimeoutCommand : public Command {
     void commandFinished(Response *response);
     void pageLoadingFromCommand();
     void pendingLoadFinished(bool);
+    void pageLoadingFromCommandForPageLoad();
+    void pendingLoadFinishedForPageLoad(bool success);
+    void commandFinishedForPageLoad(Response *response);
 
   protected:
     void startCommand();
@@ -34,5 +38,9 @@ class TimeoutCommand : public Command {
     WebPageManager *m_manager;
     QTimer *m_timer;
     Command *m_command;
+    Response *m_pendingResponse;
+    bool m_pageLoadingFromCommand;
+
+  signals:
+    void finishedForPageLoad(Response *response);
 };
- 
