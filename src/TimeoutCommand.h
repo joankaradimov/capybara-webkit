@@ -18,8 +18,8 @@ class TimeoutCommand : public Command {
   Q_OBJECT
  
   public:
-   TimeoutCommand(SocketCommand *command, WebPageManager *page, QObject *parent = 0);
-  virtual void start();
+    TimeoutCommand(SocketCommand *command, WebPageManager *page, QObject *parent = 0);
+    virtual void start();
 
   public slots:
     void commandTimeout();
