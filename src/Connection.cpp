@@ -33,7 +33,7 @@ void Connection::startCommand(SocketCommand *command) {
   }
   if (m_pageSuccess) {
     m_pendingCommand = new TimeoutCommand(command, m_manager);
-    connect(m_pendingCommand, SIGNAL(finishedForTimeout(Response *)), this, SLOT(finishCommand(Response *)));
+    connect(m_pendingCommand, SIGNAL(finished(Response *)), this, SLOT(finishCommand(Response *)));
     m_pendingCommand->start();
   } else {
     writePageLoadFailure();

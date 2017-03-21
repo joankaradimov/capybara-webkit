@@ -23,16 +23,13 @@ class TimeoutCommand : public QObject {
 
   public slots:
     void commandTimeout();
-    void commandFinished(Response *response);
     void pageLoadingFromCommand();
+    void startTimeout();
     void pendingLoadFinished(bool);
-    void pageLoadingFromCommandForPageLoad();
     void pendingLoadFinishedForPageLoad(bool success);
-    void commandFinishedForPageLoad(Response *response);
 
   protected:
     void startCommand();
-    void startTimeout();
 
   private:
     WebPageManager *m_manager;
@@ -40,8 +37,8 @@ class TimeoutCommand : public QObject {
     SocketCommand *m_command;
     Response *m_pendingResponse;
     bool m_pageLoadingFromCommand;
+    bool m_timedOut;
 
   signals:
-    void finishedForPageLoad(Response *response);
-    void finishedForTimeout(Response *response);
+    void finished(Response *response);
 };

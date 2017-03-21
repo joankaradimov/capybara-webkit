@@ -9,6 +9,7 @@
 TimeoutCommand::TimeoutCommand(SocketCommand *command, WebPageManager *manager) {
   m_command = command;
   m_pageLoadingFromCommand = false;
+  m_timedOut = false;
   m_pendingResponse = NULL;
   m_command->setParent(this);
 
@@ -16,7 +17,7 @@ TimeoutCommand::TimeoutCommand(SocketCommand *command, WebPageManager *manager) 
   m_timer = new QTimer(this);
   m_timer->setSingleShot(true);
   connect(m_timer, SIGNAL(timeout()), this, SLOT(commandTimeout()));
-  connect(m_manager, SIGNAL(loadStarted()), this, SLOT(pageLoadingFromCommand()));
+  connect(m_manager, SIGNAL(loadStarted()), this, SLOT(startTimeout()));
 }
 
 void TimeoutCommand::start() {
@@ -31,12 +32,22 @@ void TimeoutCommand::start() {
 }
 
 void TimeoutCommand::startCommand() {
-  connect(this, SIGNAL(finishedForPageLoad(Response *)), this, SLOT(commandFinished(Response *)));
+  connect(m_manager, SIGNAL(loadStarted()), this, SLOT(pageLoadingFromCommand()));
+  connect(m_manager, SIGNAL(pageFinished(bool)), this, SLOT(pendingLoadFinishedForPageLoad(bool)));
 
   m_manager->logger() << "Started" << m_command->toString();
-  connect(m_manager, SIGNAL(loadStarted()), this, SLOT(pageLoadingFromCommandForPageLoad()));
-  connect(m_manager, SIGNAL(pageFinished(bool)), this, SLOT(pendingLoadFinishedForPageLoad(bool)));
-  commandFinishedForPageLoad(m_command->start());
+  Response* response = m_command->start();
+  m_manager->logger() << "Finished" << m_command->toString() << "with response" << response->toString();
+
+  disconnect(m_manager, SIGNAL(loadStarted()), this, SLOT(pageLoadingFromCommand()));
+
+  if (m_pageLoadingFromCommand) {
+    m_pendingResponse = response;
+  } else {
+    disconnect(m_timer, SIGNAL(timeout()), this, SLOT(commandTimeout()));
+    disconnect(m_manager, SIGNAL(loadStarted()), this, SLOT(startTimeout()));
+    emit finished(response);
+  }
 }
 
 void TimeoutCommand::startTimeout() {
@@ -52,29 +63,19 @@ void TimeoutCommand::pendingLoadFinished(bool success) {
     startCommand();
   } else {
     disconnect(m_timer, SIGNAL(timeout()), this, SLOT(commandTimeout()));
-    disconnect(m_manager, SIGNAL(loadStarted()), this, SLOT(pageLoadingFromCommand()));
+    disconnect(m_manager, SIGNAL(loadStarted()), this, SLOT(startTimeout()));
     ErrorMessage* message = new ErrorMessage(m_manager->currentPage()->failureString());
-    emit finishedForTimeout(new Response(false, message, this));
+    emit finished(new Response(false, message, this));
   }
 }
 
-void TimeoutCommand::pageLoadingFromCommand() {
-  startTimeout();
-}
-
 void TimeoutCommand::commandTimeout() {
-  disconnect(m_manager, SIGNAL(loadStarted()), this, SLOT(pageLoadingFromCommand()));
+  disconnect(m_manager, SIGNAL(loadStarted()), this, SLOT(startTimeout()));
   disconnect(m_manager, SIGNAL(pageFinished(bool)), this, SLOT(pendingLoadFinished(bool)));
-  disconnect(this, SIGNAL(finishedForPageLoad(Response *)), this, SLOT(commandFinished(Response *)));
+  m_timedOut = true;
   m_manager->currentPage()->triggerAction(QWebPage::Stop);
   QString message = QString("Request timed out after %1 second(s)").arg(m_manager->getTimeout());
-  emit finishedForTimeout(new Response(false, new ErrorMessage("TimeoutError", message), this));
-}
-
-void TimeoutCommand::commandFinished(Response *response) {
-  disconnect(m_timer, SIGNAL(timeout()), this, SLOT(commandTimeout()));
-  disconnect(m_manager, SIGNAL(loadStarted()), this, SLOT(pageLoadingFromCommand()));
-  emit finishedForTimeout(response);
+  emit finished(new Response(false, new ErrorMessage("TimeoutError", message), this));
 }
 
 void TimeoutCommand::pendingLoadFinishedForPageLoad(bool success) {
@@ -82,28 +83,21 @@ void TimeoutCommand::pendingLoadFinishedForPageLoad(bool success) {
     m_pageLoadingFromCommand = false;
     if (m_pendingResponse) {
       m_manager->logger() << "Page load from command finished";
-      if (success) {
-        emit finishedForPageLoad(m_pendingResponse);
-      } else {
-        QString message = m_manager->currentPage()->failureString();
-        emit finishedForPageLoad(new Response(false, new ErrorMessage(message), this));
+      if (!m_timedOut) {
+        disconnect(m_timer, SIGNAL(timeout()), this, SLOT(commandTimeout()));
+        disconnect(m_manager, SIGNAL(loadStarted()), this, SLOT(startTimeout()));
+	if (success) {
+	  emit finished(m_pendingResponse);
+	} else {
+	  QString message = m_manager->currentPage()->failureString();
+	  emit finished(new Response(false, new ErrorMessage(message), this));
+	}
       }
     }
   }
 }
 
-void TimeoutCommand::pageLoadingFromCommandForPageLoad() {
+void TimeoutCommand::pageLoadingFromCommand() {
   m_manager->logger() << m_command->toString() << "started page load";
   m_pageLoadingFromCommand = true;
-}
-
-void TimeoutCommand::commandFinishedForPageLoad(Response *response) {
-  disconnect(m_manager, SIGNAL(loadStarted()), this, SLOT(pageLoadingFromCommandForPageLoad()));
-  m_manager->logger() << "Finished" << m_command->toString() << "with response" << response->toString();
-
-  if (m_pageLoadingFromCommand) {
-    m_pendingResponse = response;
-  } else {
-    emit finishedForPageLoad(response);
-  }
 }
