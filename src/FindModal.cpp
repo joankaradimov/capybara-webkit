@@ -27,7 +27,7 @@ Response* FindModal::start() {
 
     if (m_response != Q_NULLPTR) {
       return m_response;
-    } else {
+    } else { // TODO: use TimeoutError, maybe
       return finish(false, new ErrorMessage("ModalNotFound", "Timed out waiting for modal dialog"));
     }
   } else {
