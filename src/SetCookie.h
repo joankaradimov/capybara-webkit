@@ -5,5 +5,5 @@ class SetCookie : public SocketCommand {
 
  public:
   SetCookie(WebPageManager *, QStringList &arguments, QObject *parent = 0);
-  virtual void start();
+  virtual Response* start();
 };

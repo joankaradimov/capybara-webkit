@@ -8,7 +8,7 @@
 GetWindowHandles::GetWindowHandles(WebPageManager *manager, QStringList &arguments, QObject *parent) : SocketCommand(manager, arguments, parent) {
 }
 
-void GetWindowHandles::start() {
+Response* GetWindowHandles::start() {
   QVariantList handles;
 
   foreach(WebPage *page, manager()->pages())
@@ -17,5 +17,5 @@ void GetWindowHandles::start() {
   JsonSerializer serializer;
   QByteArray json = serializer.serialize(handles);
 
-  finish(true, json);
+  return finish(true, json);
 }

@@ -5,5 +5,5 @@ class SetPromptAction : public SocketCommand {
 
  public:
   SetPromptAction(WebPageManager *manager, QStringList &arguments, QObject *parent = 0);
-  virtual void start();
+  virtual Response* start();
 };

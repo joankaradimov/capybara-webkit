@@ -6,7 +6,7 @@
 Header::Header(WebPageManager *manager, QStringList &arguments, QObject *parent) : SocketCommand(manager, arguments, parent) {
 }
 
-void Header::start() {
+Response* Header::start() {
   QString key = arguments()[0];
   QString value = arguments()[1];
   if (key.toLower().replace("-", "_") == "user_agent") {
@@ -14,5 +14,5 @@ void Header::start() {
   } else {
     manager()->addHeader(key, value);
   }
-  finish(true);
+  return finish(true);
 }

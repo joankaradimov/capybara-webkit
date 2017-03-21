@@ -4,8 +4,8 @@
 
 ClearPromptText::ClearPromptText(WebPageManager *manager, QStringList &arguments, QObject *parent) : SocketCommand(manager, arguments, parent) {}
 
-void ClearPromptText::start()
+Response* ClearPromptText::start()
 {
   page()->setPromptText(QString());
-  finish(true);
+  return finish(true);
 }

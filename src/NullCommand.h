@@ -5,7 +5,7 @@ class NullCommand : public SocketCommand {
 
   public:
     NullCommand(WebPageManager* manager, QString name, QStringList &arguments, QObject *parent = 0);
-    virtual void start();
+    virtual Response* start();
 
   private:
     QString m_name;

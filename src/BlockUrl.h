@@ -5,6 +5,6 @@ class BlockUrl : public SocketCommand {
 
   public:
     BlockUrl(WebPageManager *, QStringList &arguments, QObject *parent = 0);
-    virtual void start();
+    virtual Response* start();
 };
 

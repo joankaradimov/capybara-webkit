@@ -6,7 +6,7 @@
 WindowOpen::WindowOpen(WebPageManager *manager, QStringList &arguments, QObject *parent) : SocketCommand(manager, arguments, parent) {
 }
 
-void WindowOpen::start() {
+Response* WindowOpen::start() {
   manager()->createPage();
-  finish(true);
+  return finish(true);
 }

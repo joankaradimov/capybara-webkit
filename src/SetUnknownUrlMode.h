@@ -6,5 +6,5 @@ class SetUnknownUrlMode : public SocketCommand {
 
   public:
     SetUnknownUrlMode(WebPageManager *, QStringList &arguments, QObject *parent = 0);
-    virtual void start();
+    virtual Response* start();
 };

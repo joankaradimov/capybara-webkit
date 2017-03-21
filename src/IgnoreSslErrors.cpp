@@ -6,8 +6,8 @@ IgnoreSslErrors::IgnoreSslErrors(WebPageManager *manager, QStringList &arguments
   SocketCommand(manager, arguments, parent) {
 }
 
-void IgnoreSslErrors::start() {
+Response* IgnoreSslErrors::start() {
   manager()->setIgnoreSslErrors(true);
-  finish(true);
+  return finish(true);
 }
 

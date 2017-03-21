@@ -5,9 +5,9 @@
 
 JavascriptConfirmMessages::JavascriptConfirmMessages(WebPageManager *manager, QStringList &arguments, QObject *parent) : SocketCommand(manager, arguments, parent) {}
 
-void JavascriptConfirmMessages::start()
+Response* JavascriptConfirmMessages::start()
 {
   JsonSerializer serializer;
   QByteArray json = serializer.serialize(page()->confirmMessages());
-  finish(true, json);
+  return finish(true, json);
 }

@@ -10,7 +10,7 @@ AllowUrl::AllowUrl(
 ) : SocketCommand(manager, arguments, parent) {
 }
 
-void AllowUrl::start() {
+Response* AllowUrl::start() {
   manager()->allowUrl(arguments()[0]);
-  finish(true);
+  return finish(true);
 }

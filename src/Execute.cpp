@@ -6,7 +6,7 @@
 Execute::Execute(WebPageManager *manager, QStringList &arguments, QObject *parent) : SocketCommand(manager, arguments, parent) {
 }
 
-void Execute::start() {
+Response* Execute::start() {
   QString jsonArgs;
   if (arguments().length()>1){
     jsonArgs = arguments()[1];
@@ -27,9 +27,9 @@ void Execute::start() {
   page()->currentFrame()->addToJavaScriptWindowObject("CapybaraInvocation", &invocation_stub);
   QVariant result = page()->currentFrame()->evaluateJavaScript(script);
   if (result.isValid()) {
-    finish(true);
+    return finish(true);
   } else {
-    finish(false, new ErrorMessage("Javascript failed to execute"));
+    return finish(false, new ErrorMessage("Javascript failed to execute"));
   }
 }
 

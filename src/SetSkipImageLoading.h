@@ -5,5 +5,5 @@ class SetSkipImageLoading : public SocketCommand {
 
   public:
     SetSkipImageLoading(WebPageManager *manager, QStringList &arguments, QObject *parent = 0);
-    virtual void start();
+    virtual Response* start();
 };

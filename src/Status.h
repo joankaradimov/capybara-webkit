@@ -5,6 +5,6 @@ class Status : public SocketCommand {
 
   public:
     Status(WebPageManager *, QStringList &arguments, QObject *parent = 0);
-    virtual void start();
+    virtual Response* start();
 };
 

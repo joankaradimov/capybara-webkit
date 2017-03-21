@@ -7,8 +7,8 @@
 SetUrlBlacklist::SetUrlBlacklist(WebPageManager *manager, QStringList &arguments, QObject *parent) : SocketCommand(manager, arguments, parent) {
 }
 
-void SetUrlBlacklist::start() {
+Response* SetUrlBlacklist::start() {
   manager()->setUrlBlacklist(arguments());
-  finish(true);
+  return finish(true);
 }
 

@@ -5,6 +5,6 @@ class GetWindowHandles : public SocketCommand {
 
   public:
     GetWindowHandles(WebPageManager *, QStringList &arguments, QObject *parent = 0);
-    virtual void start();
+    virtual Response* start();
 };
 

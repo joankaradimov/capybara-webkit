@@ -8,14 +8,14 @@ class WindowCommand : public SocketCommand {
 
   public:
     WindowCommand(WebPageManager *, QStringList &arguments, QObject *parent = 0);
-    virtual void start();
+    Response* start();
 
   protected:
-    virtual void windowFound(WebPage *) = 0;
+    virtual Response* windowFound(WebPage *) = 0;
 
   private:
-    void findWindow(QString);
-    void windowNotFound();
+    Response* findWindow(QString);
+    Response* windowNotFound();
 };
 
 #endif

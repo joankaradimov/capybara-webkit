@@ -5,6 +5,6 @@ class Body : public SocketCommand {
 
   public:
     Body(WebPageManager *, QStringList &arguments, QObject *parent = 0);
-    virtual void start();
+    virtual Response* start();
 };
 

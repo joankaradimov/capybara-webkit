@@ -5,5 +5,5 @@ class JavascriptAlertMessages : public SocketCommand {
 
   public:
     JavascriptAlertMessages(WebPageManager *manager, QStringList &arguments, QObject *parent = 0);
-    virtual void start();
+    virtual Response* start();
 };

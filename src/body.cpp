@@ -5,9 +5,9 @@
 Body::Body(WebPageManager *manager, QStringList &arguments, QObject *parent) : SocketCommand(manager, arguments, parent) {
 }
 
-void Body::start() {
+Response* Body::start() {
   if (page()->contentType().contains("html"))
-    finish(true, page()->currentFrame()->toHtml());
+    return finish(true, page()->currentFrame()->toHtml());
   else
-    finish(true, page()->body());
+    return finish(true, page()->body());
 }

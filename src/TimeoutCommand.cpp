@@ -34,10 +34,9 @@ void TimeoutCommand::startCommand() {
   connect(this, SIGNAL(finishedForPageLoad(Response *)), this, SLOT(commandFinished(Response *)));
 
   m_manager->logger() << "Started" << m_command->toString();
-  connect(m_command, SIGNAL(finished(Response *)), this, SLOT(commandFinishedForPageLoad(Response *)));
   connect(m_manager, SIGNAL(loadStarted()), this, SLOT(pageLoadingFromCommandForPageLoad()));
   connect(m_manager, SIGNAL(pageFinished(bool)), this, SLOT(pendingLoadFinishedForPageLoad(bool)));
-  m_command->start();
+  commandFinishedForPageLoad(m_command->start());
 }
 
 void TimeoutCommand::startTimeout() {

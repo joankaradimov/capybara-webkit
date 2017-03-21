@@ -7,7 +7,7 @@
 Evaluate::Evaluate(WebPageManager *manager, QStringList &arguments, QObject *parent) : SocketCommand(manager, arguments, parent) {
 }
 
-void Evaluate::start() {
+Response* Evaluate::start() {
   QString script = arguments()[0];
   QString jsonArgs;
   if (arguments().length()>1){
@@ -29,5 +29,5 @@ void Evaluate::start() {
   page()->currentFrame()->addToJavaScriptWindowObject("CapybaraInvocation", &invocation_stub);
   QVariant result = page()->currentFrame()->evaluateJavaScript(eval_script);
   JsonSerializer serializer;
-  finish(true, serializer.serialize(result));
+  return finish(true, serializer.serialize(result));
 }

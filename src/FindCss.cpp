@@ -6,8 +6,8 @@
 FindCss::FindCss(WebPageManager *manager, QStringList &arguments, QObject *parent) : JavascriptCommand(manager, arguments, parent) {
 }
 
-void FindCss::start() {
+Response* FindCss::start() {
   InvocationResult result = page()->invokeCapybaraFunction("findCss", true, arguments());
-  finish(&result);
+  return finish(&result);
 }
 

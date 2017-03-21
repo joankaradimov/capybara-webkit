@@ -7,6 +7,6 @@ class Authenticate : public SocketCommand {
 
   public:
     Authenticate(WebPageManager *manager, QStringList &arguments, QObject *parent = 0);
-    virtual void start();
+    virtual Response* start();
 };
 

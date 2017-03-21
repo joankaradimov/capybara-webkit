@@ -4,7 +4,7 @@
 WindowClose::WindowClose(WebPageManager *manager, QStringList &arguments, QObject *parent) : WindowCommand(manager, arguments, parent) {
 }
 
-void WindowClose::windowFound(WebPage *page) {
+Response* WindowClose::windowFound(WebPage *page) {
   page->remove();
-  finish(true);
+  return finish(true);
 }

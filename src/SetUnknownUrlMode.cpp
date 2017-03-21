@@ -6,7 +6,7 @@
 SetUnknownUrlMode::SetUnknownUrlMode(WebPageManager *manager, QStringList &arguments, QObject *parent) : SocketCommand(manager, arguments, parent) {
 }
 
-void SetUnknownUrlMode::start() {
+Response* SetUnknownUrlMode::start() {
   QString modeString = arguments()[0];
   QStringList modes;
   modes << "warn" << "block";
@@ -14,14 +14,12 @@ void SetUnknownUrlMode::start() {
   switch(modes.indexOf(modeString)) {
     case 0:
       manager()->setUnknownUrlMode(UnknownUrlHandler::WARN);
-      finish(true);
-      break;
+      return finish(true);
     case 1:
       manager()->setUnknownUrlMode(UnknownUrlHandler::BLOCK);
-      finish(true);
-      break;
+      return finish(true);
     default:
       QString error = QString("Invalid mode string:") + modeString;
-      finish(false, new ErrorMessage(error));
+      return finish(false, new ErrorMessage(error));
   }
 }

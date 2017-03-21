@@ -4,7 +4,7 @@
 
 SetConfirmAction::SetConfirmAction(WebPageManager *manager, QStringList &arguments, QObject *parent) : SocketCommand(manager, arguments, parent) {}
 
-void SetConfirmAction::start()
+Response* SetConfirmAction::start()
 {
   QString index;
   switch (arguments().length()) {
@@ -15,5 +15,5 @@ void SetConfirmAction::start()
       page()->setConfirmAction(arguments()[0]);
   }
 
-  finish(true, index);
+  return finish(true, index);
 }

@@ -191,8 +191,8 @@ module Capybara::Webkit
       command("AcceptAlert", options[:text])
     end
 
-    def find_modal(id)
-      command("FindModal", id)
+    def find_modal(id, timeout)
+      command("FindModal", id, timeout)
     end
 
     def url_blacklist=(black_list)

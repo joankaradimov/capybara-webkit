@@ -7,20 +7,20 @@ class FrameFocus : public SocketCommand {
 
   public:
     FrameFocus(WebPageManager *, QStringList &arguments, QObject *parent = 0);
-    virtual void start();
+    virtual Response* start();
 
   private:
     void findFrames();
 
-    void focusParent();
+    Response* focusParent();
 
-    void focusIndex(int index);
+    Response* focusIndex(int index);
     bool isFrameAtIndex(int index);
 
-    void focusId(QString id);
+    Response* focusId(QString id);
 
-    void success();
-    void frameNotFound();
+    Response* success();
+    Response* frameNotFound();
 
     QList<QWebFrame *> frames;
 };

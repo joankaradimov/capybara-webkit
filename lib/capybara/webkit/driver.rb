@@ -362,15 +362,11 @@ module Capybara::Webkit
     end
 
     def find_modal(type, id, options)
-      Timeout::timeout(options[:wait] || default_wait_time) do
-        @browser.find_modal(id)
-      end
-    rescue ModalNotFound
-      raise Capybara::ModalNotFound,
-        "Unable to find modal dialog#{" with #{options[:original_text]}" if options[:original_text]}"
-    rescue Timeout::Error
-      raise Capybara::ModalNotFound,
-        "Timed out waiting for modal dialog#{" with #{options[:original_text]}" if options[:original_text]}"
+      timeout = options[:wait] || default_wait_time
+      @browser.find_modal(id, timeout)
+    rescue ModalNotFound => e
+      original_text = options[:original_text] ? " with #{options[:original_text]}" : ''
+      raise Capybara::ModalNotFound, "#{e.message}#{original_text}"
     end
 
     def apply_options

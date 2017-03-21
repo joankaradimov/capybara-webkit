@@ -5,9 +5,9 @@
 Reset::Reset(WebPageManager *manager, QStringList &arguments, QObject *parent) : SocketCommand(manager, arguments, parent) {
 }
 
-void Reset::start() {
+Response* Reset::start() {
   manager()->reset();
 
-  finish(true);
+  return finish(true);
 }
 

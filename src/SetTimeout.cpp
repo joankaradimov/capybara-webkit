@@ -5,16 +5,15 @@
 SetTimeout::SetTimeout(WebPageManager *manager, QStringList &arguments, QObject *parent) : SocketCommand(manager, arguments, parent) {
 }
 
-void SetTimeout::start() {
+Response* SetTimeout::start() {
   QString timeoutString = arguments()[0];
   bool ok;
   int timeout = timeoutString.toInt(&ok);
 
   if (ok) {
     manager()->setTimeout(timeout);
-    finish(true);
+    return finish(true);
   } else {
-    finish(false, new ErrorMessage("Invalid value for timeout"));
+    return finish(false, new ErrorMessage("Invalid value for timeout"));
   }
 }
-

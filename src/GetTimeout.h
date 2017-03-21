@@ -7,5 +7,5 @@ class GetTimeout : public SocketCommand {
 
  public:
   GetTimeout(WebPageManager *page, QStringList &arguments, QObject *parent = 0);
-  virtual void start();
+  virtual Response* start();
 };

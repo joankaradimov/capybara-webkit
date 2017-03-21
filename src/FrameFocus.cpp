@@ -7,16 +7,14 @@
 FrameFocus::FrameFocus(WebPageManager *manager, QStringList &arguments, QObject *parent) : SocketCommand(manager, arguments, parent) {
 }
 
-void FrameFocus::start() {
+Response* FrameFocus::start() {
   switch(arguments().length()) {
     case 1:
-      focusId(arguments()[0]);
-      break;
+      return focusId(arguments()[0]);
     case 2:
-      focusIndex(arguments()[1].toInt());
-      break;
+      return focusIndex(arguments()[1].toInt());
     default:
-      focusParent();
+      return focusParent();
   }
 }
 
@@ -24,14 +22,14 @@ void FrameFocus::findFrames() {
   frames = page()->currentFrame()->childFrames();
 }
 
-void FrameFocus::focusIndex(int index) {
+Response* FrameFocus::focusIndex(int index) {
   findFrames();
   if (isFrameAtIndex(index)) {
     frames[index]->setFocus();
     page()->setCurrentFrameParent(frames[index]->parentFrame());
-    success();
+    return success();
   } else {
-    frameNotFound();
+    return frameNotFound();
   }
 }
 
@@ -39,36 +37,35 @@ bool FrameFocus::isFrameAtIndex(int index) {
   return 0 <= index && index < frames.length();
 }
 
-void FrameFocus::focusId(QString name) {
+Response* FrameFocus::focusId(QString name) {
   findFrames();
   for (int i = 0; i < frames.length(); i++) {
     if (frames[i]->frameName().compare(name) == 0) {
       frames[i]->setFocus();
       page()->setCurrentFrameParent(frames[i]->parentFrame());
-      success();
-      return;
+      return success();
     }
   }
 
-  frameNotFound();
+  return frameNotFound();
 }
 
-void FrameFocus::focusParent() {
+Response* FrameFocus::focusParent() {
   // if (page()->currentFrame()->parentFrame() == 0) {
   if (page()->currentFrameParent() == 0) {
-    finish(false, new ErrorMessage("Already at parent frame."));
+    return finish(false, new ErrorMessage("Already at parent frame."));
   } else {
     // page()->currentFrame()->parentFrame()->setFocus();
     page()->currentFrameParent()->setFocus();
     page()->setCurrentFrameParent(page()->currentFrameParent()->parentFrame());
-    success();
+    return success();
   }
 }
 
-void FrameFocus::frameNotFound() {
-  finish(false, new ErrorMessage("Unable to locate frame."));
+Response* FrameFocus::frameNotFound() {
+  return finish(false, new ErrorMessage("Unable to locate frame."));
 }
 
-void FrameFocus::success() {
-  finish(true);
+Response* FrameFocus::success() {
+  return finish(true);
 }

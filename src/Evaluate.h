@@ -7,6 +7,6 @@ class Evaluate : public SocketCommand {
 
   public:
     Evaluate(WebPageManager *, QStringList &arguments, QObject *parent = 0);
-    virtual void start();
+    virtual Response* start();
 };
 

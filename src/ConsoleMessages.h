@@ -5,6 +5,6 @@ class ConsoleMessages : public SocketCommand {
 
   public:
     ConsoleMessages(WebPageManager *, QStringList &arguments, QObject *parent = 0);
-    virtual void start();
+    virtual Response* start();
 };
 

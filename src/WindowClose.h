@@ -7,6 +7,6 @@ class WindowClose : public WindowCommand {
     WindowClose(WebPageManager *, QStringList &arguments, QObject *parent = 0);
 
   protected:
-    virtual void windowFound(WebPage *);
+    virtual Response* windowFound(WebPage *);
 };
 

@@ -15,21 +15,18 @@ class SocketCommand : public QObject {
 
   public:
     SocketCommand(WebPageManager *, QStringList &arguments, QObject *parent = 0);
-    virtual void start() = 0;
+    virtual Response* start() = 0;
     virtual QString toString() const;
-
-  signals:
-    void finished(Response *response);
 
   protected:
     WebPage *page() const;
     const QStringList &arguments() const;
     WebPageManager *manager() const;
 
-    void finish(bool success);
-    void finish(bool success, QString message);
-    void finish(bool success, QByteArray message);
-    void finish(bool success, ErrorMessage *message);
+    Response* finish(bool success);
+    Response* finish(bool success, QString message);
+    Response* finish(bool success, QByteArray message);
+    Response* finish(bool success, ErrorMessage *message);
 
   private:
     QStringList m_arguments;

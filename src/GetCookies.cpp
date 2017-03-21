@@ -8,12 +8,12 @@ GetCookies::GetCookies(WebPageManager *manager, QStringList &arguments, QObject 
   m_buffer = "";
 }
 
-void GetCookies::start()
+Response* GetCookies::start()
 {
   NetworkCookieJar *jar = manager()->cookieJar();
   foreach (QNetworkCookie cookie, jar->getAllCookies()) {
     m_buffer.append(cookie.toRawForm());
     m_buffer.append("\n");
   }
-  finish(true, m_buffer);
+  return finish(true, m_buffer);
 }

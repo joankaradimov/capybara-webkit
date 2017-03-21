@@ -6,9 +6,9 @@
 Headers::Headers(WebPageManager *manager, QStringList &arguments, QObject *parent) : SocketCommand(manager, arguments, parent) {
 }
 
-void Headers::start() {
+Response* Headers::start() {
   JsonSerializer serializer;
   QByteArray json = serializer.serialize(page()->pageHeaders());
-  finish(true, json);
+  return finish(true, json);
 }
 

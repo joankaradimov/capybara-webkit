@@ -4,7 +4,7 @@
 EnableLogging::EnableLogging(WebPageManager *manager, QStringList &arguments, QObject *parent) : SocketCommand(manager, arguments, parent) {
 }
 
-void EnableLogging::start() {
+Response* EnableLogging::start() {
   manager()->enableLogging();
-  finish(true);
+  return finish(true);
 }

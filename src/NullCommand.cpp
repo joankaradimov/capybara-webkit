@@ -8,8 +8,8 @@ NullCommand::NullCommand(WebPageManager* manager, QString name, QStringList &arg
   m_name = name;
 }
 
-void NullCommand::start() {
+Response* NullCommand::start() {
   QString failure = QString("[Capybara WebKit] Unknown command: ") + m_name + "\n";
-  finish(false, new ErrorMessage(failure));
+  return finish(false, new ErrorMessage(failure));
 }
 

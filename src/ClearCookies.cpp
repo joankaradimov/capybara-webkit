@@ -6,8 +6,8 @@
 
 ClearCookies::ClearCookies(WebPageManager *manager, QStringList &arguments, QObject *parent) : SocketCommand(manager, arguments, parent) {}
 
-void ClearCookies::start()
+Response* ClearCookies::start()
 {
   manager()->cookieJar()->clearCookies();
-  finish(true);
+  return finish(true);
 }

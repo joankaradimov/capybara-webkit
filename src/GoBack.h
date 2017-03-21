@@ -5,6 +5,6 @@ class GoBack : public SocketCommand {
 
   public:
     GoBack(WebPageManager *, QStringList &arguments, QObject *parent = 0);
-    virtual void start();
+    virtual Response* start();
 };
 

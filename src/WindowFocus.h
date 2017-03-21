@@ -7,6 +7,6 @@ class WindowFocus : public WindowCommand {
     WindowFocus(WebPageManager *, QStringList &arguments, QObject *parent = 0);
 
   protected:
-    virtual void windowFound(WebPage *);
+    virtual Response* windowFound(WebPage *);
 };
 

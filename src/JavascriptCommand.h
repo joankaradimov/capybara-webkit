@@ -14,7 +14,7 @@ class JavascriptCommand : public SocketCommand {
 
   public:
     JavascriptCommand(WebPageManager *, QStringList &arguments, QObject *parent = 0);
-    void finish(InvocationResult *result);
+    Response* finish(InvocationResult *result);
 };
 
 #endif

@@ -5,6 +5,6 @@ class Version : public SocketCommand {
 
   public:
     Version(WebPageManager *, QStringList &arguments, QObject *parent = 0);
-    virtual void start();
+    virtual Response* start();
 };
 

@@ -10,7 +10,7 @@ BlockUrl::BlockUrl(
 ) : SocketCommand(manager, arguments, parent) {
 }
 
-void BlockUrl::start() {
+Response* BlockUrl::start() {
   manager()->blockUrl(arguments()[0]);
-  finish(true);
+  return finish(true);
 }

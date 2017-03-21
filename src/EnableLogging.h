@@ -7,6 +7,6 @@ class EnableLogging : public SocketCommand {
 
   public:
     EnableLogging(WebPageManager *, QStringList &arguments, QObject *parent = 0);
-    virtual void start();
+    virtual Response* start();
 };
 

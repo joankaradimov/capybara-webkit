@@ -5,5 +5,5 @@ class SetPromptText : public SocketCommand {
 
  public:
   SetPromptText(WebPageManager *manager, QStringList &arguments, QObject *parent = 0);
-  virtual void start();
+  virtual Response* start();
 };

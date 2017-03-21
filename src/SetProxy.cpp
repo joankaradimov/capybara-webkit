@@ -6,7 +6,7 @@
 
 SetProxy::SetProxy(WebPageManager *manager, QStringList &arguments, QObject *parent) : SocketCommand(manager, arguments, parent) {}
 
-void SetProxy::start()
+Response* SetProxy::start()
 {
   // default to empty proxy
   QNetworkProxy proxy;
@@ -19,5 +19,5 @@ void SetProxy::start()
                           arguments()[3]);
 
   manager()->networkAccessManager()->setProxy(proxy);
-  finish(true);
+  return finish(true);
 }

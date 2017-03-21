@@ -6,7 +6,7 @@
 Node::Node(WebPageManager *manager, QStringList &arguments, QObject *parent) : JavascriptCommand(manager, arguments, parent) {
 }
 
-void Node::start() {
+Response* Node::start() {
   QStringList functionArguments(arguments());
   QString functionName = functionArguments.takeFirst();
   QString allowUnattached = functionArguments.takeFirst();
@@ -14,7 +14,7 @@ void Node::start() {
   if (functionName == "focus") {
     page()->setCurrentFrameParent(page()->currentFrame()->parentFrame());
   }
-  finish(&result);
+  return finish(&result);
 }
 
 QString Node::toString() const {

@@ -6,9 +6,9 @@
 ConsoleMessages::ConsoleMessages(WebPageManager *manager, QStringList &arguments, QObject *parent) : SocketCommand(manager, arguments, parent) {
 }
 
-void ConsoleMessages::start() {
+Response* ConsoleMessages::start() {
   JsonSerializer serializer;
   QByteArray json = serializer.serialize(page()->consoleMessages());
-  finish(true, json);
+  return finish(true, json);
 }
 

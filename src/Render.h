@@ -6,5 +6,5 @@ class Render : public SocketCommand {
 
   public:
     Render(WebPageManager *page, QStringList &arguments, QObject *parent = 0);
-    virtual void start();
+    virtual Response* start();
 };

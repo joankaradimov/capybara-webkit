@@ -5,6 +5,6 @@ class Headers : public SocketCommand {
 
   public:
     Headers(WebPageManager *, QStringList &arguments, QObject *parent = 0);
-    virtual void start();
+    virtual Response* start();
 };
 

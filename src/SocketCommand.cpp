@@ -26,18 +26,18 @@ QString SocketCommand::toString() const {
   return result;
 }
 
-void SocketCommand::finish(bool success) {
-  emit finished(new Response(success, this));
+Response* SocketCommand::finish(bool success) {
+  return new Response(success, this);
 }
 
-void SocketCommand::finish(bool success, QString message) {
-  emit finished(new Response(success, message, this));
+Response* SocketCommand::finish(bool success, QString message) {
+  return new Response(success, message, this);
 }
 
-void SocketCommand::finish(bool success, QByteArray message) {
-  emit finished(new Response(success, message, this));
+Response* SocketCommand::finish(bool success, QByteArray message) {
+  return new Response(success, message, this);
 }
 
-void SocketCommand::finish(bool success, ErrorMessage *message) {
-  emit finished(new Response(success, message, this));
+Response* SocketCommand::finish(bool success, ErrorMessage *message) {
+  return new Response(success, message, this);
 }

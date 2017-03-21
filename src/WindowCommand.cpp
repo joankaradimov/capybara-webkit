@@ -6,22 +6,20 @@
 WindowCommand::WindowCommand(WebPageManager *manager, QStringList &arguments, QObject *parent) : SocketCommand(manager, arguments, parent) {
 }
 
-void WindowCommand::start() {
-  findWindow(arguments()[0]);
+Response* WindowCommand::start() {
+  return findWindow(arguments()[0]);
 }
 
-void WindowCommand::findWindow(QString selector) {
+Response* WindowCommand::findWindow(QString selector) {
   foreach(WebPage *page, manager()->pages()) {
     if (page->matchesWindowSelector(selector)) {
-      windowFound(page);
-      return;
+      return windowFound(page);
     }
   }
 
-  windowNotFound();
+  return windowNotFound();
 }
 
-void WindowCommand::windowNotFound() {
-  finish(false,
-         new ErrorMessage("NoSuchWindowError", "Unable to locate window."));
+Response* WindowCommand::windowNotFound() {
+  return finish(false, new ErrorMessage("NoSuchWindowError", "Unable to locate window."));
 }

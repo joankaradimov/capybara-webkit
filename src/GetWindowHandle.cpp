@@ -6,6 +6,6 @@
 GetWindowHandle::GetWindowHandle(WebPageManager *manager, QStringList &arguments, QObject *parent) : SocketCommand(manager, arguments, parent) {
 }
 
-void GetWindowHandle::start() {
-  finish(true, page()->uuid());
+Response* GetWindowHandle::start() {
+  return finish(true, page()->uuid());
 }

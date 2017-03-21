@@ -6,7 +6,7 @@ class Node : public JavascriptCommand {
 
   public:
     Node(WebPageManager *manager, QStringList &arguments, QObject *parent = 0);
-    virtual void start();
+    virtual Response* start();
     virtual QString toString() const;
 };
 

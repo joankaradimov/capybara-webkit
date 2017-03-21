@@ -5,7 +5,7 @@ class FindCss : public JavascriptCommand {
 
   public:
     FindCss(WebPageManager *, QStringList &arguments, QObject *parent = 0);
-    virtual void start();
+    virtual Response* start();
 };
 
 

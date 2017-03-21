@@ -5,10 +5,10 @@
 CurrentUrl::CurrentUrl(WebPageManager *manager, QStringList &arguments, QObject *parent) : SocketCommand(manager, arguments, parent) {
 }
 
-void CurrentUrl::start() {
+Response* CurrentUrl::start() {
   QStringList arguments;
   QVariant result = page()->currentFrame()->evaluateJavaScript("window.location.toString()");
   QString url = result.toString();
-  finish(true, url);
+  return finish(true, url);
 }
 

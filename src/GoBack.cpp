@@ -6,7 +6,7 @@
 GoBack::GoBack(WebPageManager *manager, QStringList &arguments, QObject *parent) : SocketCommand(manager, arguments, parent) {
 }
 
-void GoBack::start() {
+Response* GoBack::start() {
   page()->triggerAction(QWebPage::Back);
-  finish(true);
+  return finish(true);
 }

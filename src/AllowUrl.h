@@ -5,6 +5,6 @@ class AllowUrl : public SocketCommand {
 
   public:
     AllowUrl(WebPageManager *, QStringList &arguments, QObject *parent = 0);
-    virtual void start();
+    virtual Response* start();
 };
 

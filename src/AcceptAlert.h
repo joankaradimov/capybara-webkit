@@ -5,6 +5,6 @@ class AcceptAlert : public SocketCommand {
 
   public:
     AcceptAlert(WebPageManager *, QStringList &arguments, QObject *parent = 0);
-    virtual void start();
+    virtual Response* start();
 };
 

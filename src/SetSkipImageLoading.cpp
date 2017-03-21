@@ -6,7 +6,7 @@ SetSkipImageLoading::SetSkipImageLoading(WebPageManager *manager, QStringList &a
   SocketCommand(manager, arguments, parent) {
 }
 
-void SetSkipImageLoading::start() {
+Response* SetSkipImageLoading::start() {
   page()->setSkipImageLoading(arguments().contains("true"));
-  finish(true);
+  return finish(true);
 }

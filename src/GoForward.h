@@ -5,6 +5,6 @@ class GoForward : public SocketCommand {
 
   public:
     GoForward(WebPageManager *, QStringList &arguments, QObject *parent = 0);
-    virtual void start();
+    virtual Response* start();
 };
 

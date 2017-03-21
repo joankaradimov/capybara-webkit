@@ -6,8 +6,8 @@
 Status::Status(WebPageManager *manager, QStringList &arguments, QObject *parent) : SocketCommand(manager, arguments, parent) {
 }
 
-void Status::start() {
+Response* Status::start() {
   int status = page()->getLastStatus();
-  finish(true, QString::number(status));
+  return finish(true, QString::number(status));
 }
 
