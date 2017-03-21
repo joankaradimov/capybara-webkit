@@ -39,7 +39,6 @@ HEADERS = \
   WebPage.h \
   Server.h \
   Connection.h \
-  Command.h \
   SocketCommand.h \
   Visit.h \
   Reset.h \
@@ -122,7 +121,6 @@ SOURCES = \
   WebPage.cpp \
   Server.cpp \
   Connection.cpp \
-  Command.cpp \
   SocketCommand.cpp \
   Visit.cpp \
   Reset.cpp \

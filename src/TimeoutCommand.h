@@ -37,7 +37,7 @@ class TimeoutCommand : public QObject {
   private:
     WebPageManager *m_manager;
     QTimer *m_timer;
-    Command *m_command;
+    SocketCommand *m_command;
     Response *m_pendingResponse;
     bool m_pageLoadingFromCommand;
 
