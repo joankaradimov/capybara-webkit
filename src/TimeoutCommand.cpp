@@ -6,7 +6,7 @@
 #include <QTimer>
 #include <QApplication>
 
-TimeoutCommand::TimeoutCommand(SocketCommand *command, WebPageManager *manager, QObject *parent) : Command(parent) {
+TimeoutCommand::TimeoutCommand(SocketCommand *command, WebPageManager *manager) {
   m_command = command;
   m_pageLoadingFromCommand = false;
   m_pendingResponse = NULL;
@@ -22,7 +22,7 @@ TimeoutCommand::TimeoutCommand(SocketCommand *command, WebPageManager *manager, 
 void TimeoutCommand::start() {
   QApplication::processEvents();
   if (m_manager->isLoading()) {
-    m_manager->logger() << this->toString() << "waiting for load to finish";
+    m_manager->logger() << "waiting for load to finish";
     connect(m_manager, SIGNAL(pageFinished(bool)), this, SLOT(pendingLoadFinished(bool)));
     startTimeout();
   } else {
@@ -54,7 +54,8 @@ void TimeoutCommand::pendingLoadFinished(bool success) {
   } else {
     disconnect(m_timer, SIGNAL(timeout()), this, SLOT(commandTimeout()));
     disconnect(m_manager, SIGNAL(loadStarted()), this, SLOT(pageLoadingFromCommand()));
-    finish(false, new ErrorMessage(m_manager->currentPage()->failureString()));
+    ErrorMessage* message = new ErrorMessage(m_manager->currentPage()->failureString());
+    emit finishedForTimeout(new Response(false, message, this));
   }
 }
 
@@ -68,13 +69,13 @@ void TimeoutCommand::commandTimeout() {
   disconnect(this, SIGNAL(finishedForPageLoad(Response *)), this, SLOT(commandFinished(Response *)));
   m_manager->currentPage()->triggerAction(QWebPage::Stop);
   QString message = QString("Request timed out after %1 second(s)").arg(m_manager->getTimeout());
-  finish(false, new ErrorMessage("TimeoutError", message));
+  emit finishedForTimeout(new Response(false, new ErrorMessage("TimeoutError", message), this));
 }
 
 void TimeoutCommand::commandFinished(Response *response) {
   disconnect(m_timer, SIGNAL(timeout()), this, SLOT(commandTimeout()));
   disconnect(m_manager, SIGNAL(loadStarted()), this, SLOT(pageLoadingFromCommand()));
-  emit finished(response);
+  emit finishedForTimeout(response);
 }
 
 void TimeoutCommand::pendingLoadFinishedForPageLoad(bool success) {

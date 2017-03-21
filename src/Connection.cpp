@@ -32,8 +32,8 @@ void Connection::startCommand(SocketCommand *command) {
     m_pendingCommand->deleteLater();
   }
   if (m_pageSuccess) {
-    m_pendingCommand = new TimeoutCommand(command, m_manager, this);
-    connect(m_pendingCommand, SIGNAL(finished(Response *)), this, SLOT(finishCommand(Response *)));
+    m_pendingCommand = new TimeoutCommand(command, m_manager);
+    connect(m_pendingCommand, SIGNAL(finishedForTimeout(Response *)), this, SLOT(finishCommand(Response *)));
     m_pendingCommand->start();
   } else {
     writePageLoadFailure();

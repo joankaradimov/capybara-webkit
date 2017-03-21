@@ -14,11 +14,11 @@ class QTimer;
  * be stopped and failure response will be issued.
  *
  */
-class TimeoutCommand : public Command {
+class TimeoutCommand : public QObject {
   Q_OBJECT
  
   public:
-    TimeoutCommand(SocketCommand *command, WebPageManager *page, QObject *parent = 0);
+    TimeoutCommand(SocketCommand *command, WebPageManager *page);
     virtual void start();
 
   public slots:
@@ -43,4 +43,5 @@ class TimeoutCommand : public Command {
 
   signals:
     void finishedForPageLoad(Response *response);
+    void finishedForTimeout(Response *response);
 };
