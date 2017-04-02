@@ -50,14 +50,14 @@ module CapybaraWebkitBuilder
 
   def path_to_binary
     if Gem.win_platform?
-      "src/debug/webkit_server.exe"
+      "src/release/webkit_server.exe"
     else
       "src/webkit_server"
     end
   end
 
   def build
-    make or return false
+    Gem.win_platform? and make('release') or make or return false
 
     FileUtils.mkdir("bin") unless File.directory?("bin")
     FileUtils.cp(path_to_binary, "bin", :preserve => true)

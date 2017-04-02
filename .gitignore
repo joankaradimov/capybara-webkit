@@ -20,6 +20,7 @@ src/webkit_server.exe
 tmp
 .rvmrc
 src/debug
+src/release
 webkit_server.pro.user
 .vagrant
 *.gch
