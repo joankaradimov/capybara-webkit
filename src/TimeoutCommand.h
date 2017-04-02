@@ -19,7 +19,7 @@ class TimeoutCommand : public QObject {
  
   public:
     TimeoutCommand(SocketCommand *command, WebPageManager *page);
-    virtual void start();
+    virtual Response* start();
 
   public slots:
     void commandTimeout();
@@ -36,8 +36,10 @@ class TimeoutCommand : public QObject {
     QTimer *m_timer;
     SocketCommand *m_command;
     Response *m_pendingResponse;
+    Response *m_response;
     bool m_pageLoadingFromCommand;
     bool m_timedOut;
+    QEventLoop m_wait_loop;
 
   signals:
     void finished(Response *response);

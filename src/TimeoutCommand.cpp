@@ -11,6 +11,7 @@ TimeoutCommand::TimeoutCommand(SocketCommand *command, WebPageManager *manager) 
   m_pageLoadingFromCommand = false;
   m_timedOut = false;
   m_pendingResponse = NULL;
+  m_response = NULL;
   m_command->setParent(this);
 
   m_manager = manager;
@@ -20,7 +21,7 @@ TimeoutCommand::TimeoutCommand(SocketCommand *command, WebPageManager *manager) 
   connect(m_manager, SIGNAL(loadStarted()), this, SLOT(startTimeout()));
 }
 
-void TimeoutCommand::start() {
+Response* TimeoutCommand::start() {
   QApplication::processEvents();
   if (m_manager->isLoading()) {
     m_manager->logger() << "waiting for load to finish";
@@ -29,6 +30,11 @@ void TimeoutCommand::start() {
   } else {
     startCommand();
   }
+
+  if (m_response == NULL) {
+    m_wait_loop.exec();
+  }
+  return m_response;
 }
 
 void TimeoutCommand::startCommand() {
@@ -46,7 +52,8 @@ void TimeoutCommand::startCommand() {
   } else {
     disconnect(m_timer, SIGNAL(timeout()), this, SLOT(commandTimeout()));
     disconnect(m_manager, SIGNAL(loadStarted()), this, SLOT(startTimeout()));
-    emit finished(response);
+    m_response = response;
+    m_wait_loop.quit();
   }
 }
 
@@ -65,7 +72,8 @@ void TimeoutCommand::pendingLoadFinished(bool success) {
     disconnect(m_timer, SIGNAL(timeout()), this, SLOT(commandTimeout()));
     disconnect(m_manager, SIGNAL(loadStarted()), this, SLOT(startTimeout()));
     ErrorMessage* message = new ErrorMessage(m_manager->currentPage()->failureString());
-    emit finished(new Response(false, message, this));
+    m_response = new Response(false, message, this);
+    m_wait_loop.quit();
   }
 }
 
@@ -75,7 +83,8 @@ void TimeoutCommand::commandTimeout() {
   m_timedOut = true;
   m_manager->currentPage()->triggerAction(QWebPage::Stop);
   QString message = QString("Request timed out after %1 second(s)").arg(m_manager->getTimeout());
-  emit finished(new Response(false, new ErrorMessage("TimeoutError", message), this));
+  m_response = new Response(false, new ErrorMessage("TimeoutError", message), this);
+  m_wait_loop.quit();
 }
 
 void TimeoutCommand::pendingLoadFinishedForPageLoad(bool success) {
@@ -87,11 +96,12 @@ void TimeoutCommand::pendingLoadFinishedForPageLoad(bool success) {
         disconnect(m_timer, SIGNAL(timeout()), this, SLOT(commandTimeout()));
         disconnect(m_manager, SIGNAL(loadStarted()), this, SLOT(startTimeout()));
 	if (success) {
-	  emit finished(m_pendingResponse);
+	  m_response = m_pendingResponse;
 	} else {
 	  QString message = m_manager->currentPage()->failureString();
-	  emit finished(new Response(false, new ErrorMessage(message), this));
+	  m_response = new Response(false, new ErrorMessage(message), this);
 	}
+	m_wait_loop.quit();
       }
     }
   }
