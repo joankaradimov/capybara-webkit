@@ -8,6 +8,7 @@
 class WebPage;
 class WebPageManager;
 class Response;
+class TimeoutCommand;
 class ErrorMessage;
 
 class SocketCommand : public QObject {
@@ -15,6 +16,7 @@ class SocketCommand : public QObject {
 
   public:
     SocketCommand(WebPageManager *, QStringList &arguments, QObject *parent = 0);
+    Response* execute();
     virtual Response* start() = 0;
     virtual QString toString() const;
 
@@ -31,7 +33,7 @@ class SocketCommand : public QObject {
   private:
     QStringList m_arguments;
     WebPageManager *m_manager;
-
+    TimeoutCommand* m_timeoutCommand;
 };
 
 #endif

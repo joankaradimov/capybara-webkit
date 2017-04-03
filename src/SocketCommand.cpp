@@ -1,4 +1,5 @@
 #include "SocketCommand.h"
+#include "TimeoutCommand.h"
 #include "WebPage.h"
 #include "WebPageManager.h"
 #include "ErrorMessage.h"
@@ -6,6 +7,11 @@
 SocketCommand::SocketCommand(WebPageManager *manager, QStringList &arguments, QObject *parent) : QObject(parent) {
   m_manager = manager;
   m_arguments = arguments;
+}
+
+Response* SocketCommand::execute() {
+  m_timeoutCommand = new TimeoutCommand(this, m_manager);
+  return m_timeoutCommand->execute();
 }
 
 WebPage *SocketCommand::page() const {

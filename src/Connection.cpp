@@ -3,7 +3,6 @@
 #include "WebPageManager.h"
 #include "CommandParser.h"
 #include "CommandFactory.h"
-#include "TimeoutCommand.h"
 #include "SocketCommand.h"
 #include "ErrorMessage.h"
 
@@ -28,8 +27,7 @@ void Connection::commandReady(SocketCommand *command) {
 
 void Connection::startCommand(SocketCommand *command) {
   if (m_pageSuccess) {
-    TimeoutCommand m_pendingCommand(command, m_manager);
-    Response* response = m_pendingCommand.execute();
+    Response* response = command->execute();
     m_pageSuccess = true;
     writeResponse(response);
   } else {
