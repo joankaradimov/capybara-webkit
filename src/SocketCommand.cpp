@@ -9,28 +9,35 @@ SocketCommand::SocketCommand(WebPageManager *manager, QStringList &arguments, QO
 }
 
 Response* SocketCommand::execute() {
-  m_pageLoadingFromCommand = false;
-  m_timedOut = false;
-  m_pendingResponse = NULL;
-  m_response = NULL;
+  if (m_manager->currentPage()->isLastLoadSuccess()) {
+    m_pageLoadingFromCommand = false;
+    m_timedOut = false;
+    m_pendingResponse = NULL;
+    m_response = NULL;
 
-  m_timer = new QTimer(this);
-  m_timer->setSingleShot(true);
-  connect(m_timer, SIGNAL(timeout()), this, SLOT(commandTimeout()));
-  connect(m_manager, SIGNAL(loadStarted()), this, SLOT(startTimeout()));
+    m_timer = new QTimer(this);
+    m_timer->setSingleShot(true);
+    connect(m_timer, SIGNAL(timeout()), this, SLOT(commandTimeout()));
+    connect(m_manager, SIGNAL(loadStarted()), this, SLOT(startTimeout()));
 
-  QApplication::processEvents();
-  if (m_manager->isLoading()) {
-    m_manager->logger() << "waiting for load to finish";
-    connect(m_manager, SIGNAL(pageFinished(bool)), this, SLOT(pendingLoadFinished(bool)));
-    startTimeout();
+    QApplication::processEvents();
+    if (m_manager->isLoading()) {
+      m_manager->logger() << "waiting for load to finish";
+      connect(m_manager, SIGNAL(pageFinished(bool)), this, SLOT(pendingLoadFinished(bool)));
+      startTimeout();
+    } else {
+      startCommand();
+    }
+
+    if (m_response == NULL) {
+      m_wait_loop.exec();
+    }
   } else {
-    startCommand();
+    QString message = m_manager->currentPage()->failureString();
+    m_response = new Response(false, new ErrorMessage(message));
   }
 
-  if (m_response == NULL) {
-    m_wait_loop.exec();
-  }
+  m_manager->currentPage()->resetLastLoadSuccess();
   return m_response;
 }
 

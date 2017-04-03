@@ -17,6 +17,7 @@
 WebPage::WebPage(WebPageManager *manager, QObject *parent) : QWebPage(parent) {
   m_loading = false;
   m_failed = false;
+  m_isLastLoadSuccess = true;
   m_manager = manager;
   m_uuid = QUuid::createUuid().toString();
   m_confirmAction = true;
@@ -261,7 +262,7 @@ void WebPage::loadStarted() {
 }
 
 void WebPage::loadFinished(bool success) {
-  Q_UNUSED(success);
+  m_isLastLoadSuccess &= success;
   m_loading = false;
   emit pageFinished(!m_failed);
   m_failed = false;
@@ -496,4 +497,10 @@ void WebPage::setCurrentFrameParent(QWebFrame* frame) {
   m_currentFrameParent = frame;
 }
 
+bool WebPage::isLastLoadSuccess() {
+  return m_isLastLoadSuccess;
+}
 
+void WebPage::resetLastLoadSuccess() {
+  m_isLastLoadSuccess = true;
+}

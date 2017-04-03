@@ -14,32 +14,17 @@ Connection::Connection(QTcpSocket *socket, WebPageManager *manager, QObject *par
   m_manager = manager;
   m_commandFactory = new CommandFactory(m_manager, this);
   m_commandParser = new CommandParser(socket, m_commandFactory, this);
-  m_pageSuccess = true;
   connect(m_socket, SIGNAL(readyRead()), m_commandParser, SLOT(checkNext()));
   connect(m_commandParser, SIGNAL(commandReady(SocketCommand *)), this, SLOT(commandReady(SocketCommand *)));
-  connect(m_manager, SIGNAL(pageFinished(bool)), this, SLOT(pendingLoadFinished(bool)));
 }
 
 void Connection::commandReady(SocketCommand *command) {
   m_manager->logger() << "Received" << command->toString();
-  startCommand(command);
-}
 
-void Connection::startCommand(SocketCommand *command) {
-  if (m_pageSuccess) {
-    Response* response = command->execute();
-    m_pageSuccess = true;
-    writeResponse(response);
-  } else {
-    m_pageSuccess = true;
-    QString message = m_manager->currentPage()->failureString();
-    Response response(false, new ErrorMessage(message));
-    writeResponse(&response);
-  }
-}
+  Response* response = command->execute();
+  writeResponse(response);
 
-void Connection::pendingLoadFinished(bool success) {
-  m_pageSuccess = m_pageSuccess && success;
+  m_manager->logger() << "Wrote response" << response->isSuccess() << response->message();
 }
 
 void Connection::writeResponse(Response *response) {
@@ -47,8 +32,6 @@ void Connection::writeResponse(Response *response) {
     m_socket->write("ok\n");
   else
     m_socket->write("failure\n");
-
-  m_manager->logger() << "Wrote response" << response->isSuccess() << response->message();
 
   QByteArray messageUtf8 = response->message();
   QString messageLength = QString::number(messageUtf8.size()) + "\n";

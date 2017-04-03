@@ -16,10 +16,8 @@ class Connection : public QObject {
 
   public slots:
     void commandReady(SocketCommand *command);
-    void pendingLoadFinished(bool success);
 
   private:
-    void startCommand(SocketCommand *);
     void writeResponse(Response *response);
 
     QTcpSocket *m_socket;

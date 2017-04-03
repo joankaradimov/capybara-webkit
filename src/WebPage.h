@@ -57,6 +57,8 @@ class WebPage : public QWebPage {
     QString modalMessage();
     void setCurrentFrameParent(QWebFrame* frame);
     QWebFrame* currentFrameParent();
+    bool isLastLoadSuccess();
+    void resetLastLoadSuccess();
 
   public slots:
     bool shouldInterruptJavaScript();
@@ -89,6 +91,7 @@ class WebPage : public QWebPage {
     QString m_userAgent;
     bool m_loading;
     bool m_failed;
+    bool m_isLastLoadSuccess;
     QStringList getAttachedFileNames();
     void loadJavascript();
     void setUserStylesheet();
