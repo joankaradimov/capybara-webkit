@@ -32,7 +32,7 @@ void Connection::startCommand(SocketCommand *command) {
     writeResponse(response);
   } else {
     m_pageSuccess = true;
-    QString message = currentPage()->failureString();
+    QString message = m_manager->currentPage()->failureString();
     Response response(false, new ErrorMessage(message));
     writeResponse(&response);
   }
@@ -54,8 +54,4 @@ void Connection::writeResponse(Response *response) {
   QString messageLength = QString::number(messageUtf8.size()) + "\n";
   m_socket->write(messageLength.toLatin1());
   m_socket->write(messageUtf8);
-}
-
-WebPage *Connection::currentPage() {
-  return m_manager->currentPage();
 }

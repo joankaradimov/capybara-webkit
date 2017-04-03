@@ -1,5 +1,4 @@
 #include <QObject>
-#include <QStringList>
 
 class QTcpSocket;
 class WebPage;
@@ -7,7 +6,6 @@ class SocketCommand;
 class Response;
 class CommandParser;
 class CommandFactory;
-class PageLoadingCommand;
 class WebPageManager;
 
 class Connection : public QObject {
@@ -29,5 +27,4 @@ class Connection : public QObject {
     CommandParser *m_commandParser;
     CommandFactory *m_commandFactory;
     bool m_pageSuccess;
-    WebPage *currentPage();
 };
