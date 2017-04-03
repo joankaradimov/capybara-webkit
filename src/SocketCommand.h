@@ -31,15 +31,16 @@ class SocketCommand : public QObject {
     Response* finish(bool success, QByteArray message);
     Response* finish(bool success, ErrorMessage *message);
 
+    Response *m_response;
+    QEventLoop m_wait_loop;
+
   private:
     QStringList m_arguments;
     WebPageManager *m_manager;
     QTimer *m_timer;
     Response *m_pendingResponse;
-    Response *m_response;
     bool m_pageLoadingFromCommand;
     bool m_timedOut;
-    QEventLoop m_wait_loop;
 
   public slots:
     void commandTimeout();

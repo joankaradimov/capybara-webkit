@@ -4,8 +4,8 @@
 #include "WebPageManager.h"
 #include "ErrorMessage.h"
 
-FindModal::FindModal(WebPageManager *manager, QStringList &arguments, QObject *parent) : SocketCommand(manager, arguments, parent) {
-  m_response = Q_NULLPTR;
+FindModal::FindModal(WebPageManager *manager, QStringList &arguments, QObject *parent)
+  : SocketCommand(manager, arguments, parent) {
 }
 
 Response* FindModal::start() {

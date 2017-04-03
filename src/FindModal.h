@@ -13,8 +13,5 @@ class FindModal : public SocketCommand {
   private:
     Response* buildModalResponse();
 
-    Response* m_response;
     QTimer *m_timer;
-    QEventLoop m_wait_loop;
 };
-
