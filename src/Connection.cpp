@@ -33,19 +33,15 @@ void Connection::startCommand(SocketCommand *command) {
     m_pageSuccess = true;
     writeResponse(response);
   } else {
-    writePageLoadFailure();
+    m_pageSuccess = true;
+    QString message = currentPage()->failureString();
+    Response response(false, new ErrorMessage(message));
+    writeResponse(&response);
   }
 }
 
 void Connection::pendingLoadFinished(bool success) {
   m_pageSuccess = m_pageSuccess && success;
-}
-
-void Connection::writePageLoadFailure() {
-  m_pageSuccess = true;
-  QString message = currentPage()->failureString();
-  Response response(false, new ErrorMessage(message));
-  writeResponse(&response);
 }
 
 void Connection::writeResponse(Response *response) {

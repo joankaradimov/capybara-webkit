@@ -23,7 +23,6 @@ class Connection : public QObject {
   private:
     void startCommand(SocketCommand *);
     void writeResponse(Response *response);
-    void writePageLoadFailure();
 
     QTcpSocket *m_socket;
     WebPageManager *m_manager;
@@ -32,4 +31,3 @@ class Connection : public QObject {
     bool m_pageSuccess;
     WebPage *currentPage();
 };
-
