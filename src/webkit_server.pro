@@ -70,7 +70,6 @@ HEADERS = \
   GetWindowHandle.h \
   GetTimeout.h \
   SetTimeout.h \
-  TimeoutCommand.h \
   SetUrlBlacklist.h \
   NoOpReply.h \
   JsonSerializer.h \
@@ -152,7 +151,6 @@ SOURCES = \
   WindowFocus.cpp \
   GetWindowHandles.cpp \
   GetWindowHandle.cpp \
-  TimeoutCommand.cpp \
   SetUrlBlacklist.cpp \
   NoOpReply.cpp \
   JsonSerializer.cpp \

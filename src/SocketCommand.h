@@ -17,13 +17,14 @@ class SocketCommand : public QObject {
   public:
     SocketCommand(WebPageManager *, QStringList &arguments, QObject *parent = 0);
     Response* execute();
-    virtual Response* start() = 0;
     virtual QString toString() const;
 
   protected:
     WebPage *page() const;
     const QStringList &arguments() const;
     WebPageManager *manager() const;
+    virtual Response* start() = 0;
+    void startCommand();
 
     Response* finish(bool success);
     Response* finish(bool success, QString message);
@@ -33,7 +34,19 @@ class SocketCommand : public QObject {
   private:
     QStringList m_arguments;
     WebPageManager *m_manager;
-    TimeoutCommand* m_timeoutCommand;
+    QTimer *m_timer;
+    Response *m_pendingResponse;
+    Response *m_response;
+    bool m_pageLoadingFromCommand;
+    bool m_timedOut;
+    QEventLoop m_wait_loop;
+
+  public slots:
+    void commandTimeout();
+    void pageLoadingFromCommand();
+    void startTimeout();
+    void pendingLoadFinished(bool);
+    void pendingLoadFinishedForPageLoad(bool success);
 };
 
 #endif
