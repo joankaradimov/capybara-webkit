@@ -21,7 +21,7 @@ TimeoutCommand::TimeoutCommand(SocketCommand *command, WebPageManager *manager) 
   connect(m_manager, SIGNAL(loadStarted()), this, SLOT(startTimeout()));
 }
 
-Response* TimeoutCommand::start() {
+Response* TimeoutCommand::execute() {
   QApplication::processEvents();
   if (m_manager->isLoading()) {
     m_manager->logger() << "waiting for load to finish";

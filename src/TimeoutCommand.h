@@ -19,7 +19,7 @@ class TimeoutCommand : public QObject {
  
   public:
     TimeoutCommand(SocketCommand *command, WebPageManager *page);
-    virtual Response* start();
+    virtual Response* execute();
 
   public slots:
     void commandTimeout();

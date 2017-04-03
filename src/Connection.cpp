@@ -29,7 +29,7 @@ void Connection::commandReady(SocketCommand *command) {
 void Connection::startCommand(SocketCommand *command) {
   if (m_pageSuccess) {
     TimeoutCommand m_pendingCommand(command, m_manager);
-    Response* response = m_pendingCommand.start();
+    Response* response = m_pendingCommand.execute();
     m_pageSuccess = true;
     writeResponse(response);
   } else {
