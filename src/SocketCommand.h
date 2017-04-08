@@ -8,7 +8,6 @@
 class WebPage;
 class WebPageManager;
 class Response;
-class TimeoutCommand;
 class ErrorMessage;
 
 class SocketCommand : public QObject {
