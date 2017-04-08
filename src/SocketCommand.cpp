@@ -20,7 +20,7 @@ Response* SocketCommand::execute() {
     connect(m_timer, SIGNAL(timeout()), this, SLOT(commandTimeout()));
     connect(m_manager, SIGNAL(loadStarted()), this, SLOT(startTimeout()));
 
-    QApplication::processEvents();
+    m_manager->processEvents();
     if (m_manager->isLoading()) {
       m_manager->logger() << "waiting for load to finish";
       connect(m_manager, SIGNAL(pageFinished(bool)), this, SLOT(pendingLoadFinished(bool)));

@@ -42,6 +42,8 @@ class WebPageManager : public QObject {
     void setUnknownUrlMode(UnknownUrlHandler::Mode);
     void allowUrl(const QString &);
     void blockUrl(const QString &);
+    void processEvents();
+    int exec();
 
   public slots:
     void emitLoadStarted();
@@ -49,6 +51,7 @@ class WebPageManager : public QObject {
     void requestCreated(QByteArray &url, QNetworkReply *reply);
     void handleReplyFinished();
     void replyDestroyed(QObject *);
+    void quit();
 
   signals:
     void pageFinished(bool);
@@ -72,6 +75,7 @@ class WebPageManager : public QObject {
     BlacklistedRequestHandler *m_blacklistedRequestHandler;
     CustomHeadersRequestHandler *m_customHeadersRequestHandler;
     UnknownUrlHandler *m_unknownUrlHandler;
+    QApplication m_application;
 };
 
 #endif // _WEBPAGEMANAGER_H

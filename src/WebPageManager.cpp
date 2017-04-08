@@ -8,7 +8,19 @@
 #include "UnknownUrlHandler.h"
 #include "NetworkRequestFactory.h"
 
-WebPageManager::WebPageManager(QObject *parent) : QObject(parent) {
+int argc = 1;
+char executableName[] = "ruby";
+char* argv[] = { executableName };
+
+WebPageManager::WebPageManager(QObject *parent) : QObject(parent), m_application(argc, argv) {
+#ifdef Q_OS_MAC
+  QApplication::setStyle(QStyleFactory::create("Fusion"));
+#endif
+
+  m_application.setApplicationName("capybara-webkit");
+  m_application.setOrganizationName("thoughtbot, inc");
+  m_application.setOrganizationDomain("thoughtbot.com");
+
   m_ignoreSslErrors = false;
   m_cookieJar = new NetworkCookieJar(this);
   m_success = true;
@@ -216,4 +228,16 @@ void WebPageManager::allowUrl(const QString &url) {
 
 void WebPageManager::blockUrl(const QString &url) {
   m_blacklistedRequestHandler->blockUrl(url);
+}
+
+void WebPageManager::processEvents() {
+  m_application.processEvents();
+}
+
+int WebPageManager::exec() {
+  return m_application.exec();
+}
+
+void WebPageManager::quit() {
+  m_application.quit();
 }

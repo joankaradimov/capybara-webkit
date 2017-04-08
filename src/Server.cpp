@@ -5,6 +5,7 @@
 #include <QTcpServer>
 
 Server::Server(QObject *parent) : QObject(parent) {
+  m_manager = new WebPageManager(this);
   m_tcp_server = new QTcpServer(this);
 }
 
@@ -24,7 +25,11 @@ quint16 Server::server_port() const {
   return m_tcp_server->serverPort();
 }
 
+WebPageManager* Server::manager() {
+  return m_manager;
+}
+
 void Server::handleConnection() {
   QTcpSocket *socket = m_tcp_server->nextPendingConnection();
-  new Connection(socket, new WebPageManager(this), this);
+  new Connection(socket, m_manager, this);
 }
