@@ -23,6 +23,7 @@ void Connection::commandReady(SocketCommand *command) {
 
   Response* response = command->execute();
   writeResponse(response);
+  command->deleteLater();
 
   m_manager->logger() << "Wrote response" << response->isSuccess() << response->message();
 }
