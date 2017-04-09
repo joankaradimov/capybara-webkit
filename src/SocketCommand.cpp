@@ -9,6 +9,8 @@ SocketCommand::SocketCommand(WebPageManager *manager, QStringList &arguments, QO
 }
 
 Response* SocketCommand::execute() {
+  m_manager->logger() << "Received" << toString();
+
   if (m_manager->currentPage()->isLastLoadSuccess()) {
     m_pageLoadingFromCommand = false;
     m_timedOut = false;
@@ -53,6 +55,7 @@ Response* SocketCommand::execute() {
   }
 
   m_manager->currentPage()->resetLastLoadSuccess();
+  m_manager->logger() << "Wrote response" << m_response->isSuccess() << m_response->message();
   return m_response;
 }
 

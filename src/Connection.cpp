@@ -11,21 +11,16 @@
 Connection::Connection(QTcpSocket *socket, WebPageManager *manager, QObject *parent) :
     QObject(parent) {
   m_socket = socket;
-  m_manager = manager;
-  m_commandFactory = new CommandFactory(m_manager, this);
+  m_commandFactory = new CommandFactory(manager, this);
   m_commandParser = new CommandParser(socket, m_commandFactory, this);
   connect(m_socket, SIGNAL(readyRead()), m_commandParser, SLOT(checkNext()));
   connect(m_commandParser, SIGNAL(commandReady(SocketCommand *)), this, SLOT(commandReady(SocketCommand *)));
 }
 
 void Connection::commandReady(SocketCommand *command) {
-  m_manager->logger() << "Received" << command->toString();
-
   Response* response = command->execute();
   writeResponse(response);
   command->deleteLater();
-
-  m_manager->logger() << "Wrote response" << response->isSuccess() << response->message();
 }
 
 void Connection::writeResponse(Response *response) {

@@ -21,7 +21,6 @@ class Connection : public QObject {
     void writeResponse(Response *response);
 
     QTcpSocket *m_socket;
-    WebPageManager *m_manager;
     CommandParser *m_commandParser;
     CommandFactory *m_commandFactory;
     bool m_pageSuccess;
