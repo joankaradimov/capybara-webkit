@@ -14,17 +14,13 @@ Response* SocketCommand::execute() {
     m_timedOut = false;
     m_pendingResponse = NULL;
     m_response = NULL;
-
     m_timer = new QTimer(this);
-    m_timer->setSingleShot(true);
-    connect(m_timer, SIGNAL(timeout()), this, SLOT(commandTimeout()));
-    connect(m_manager, SIGNAL(loadStarted()), this, SLOT(startTimeout()));
 
     m_manager->processEvents();
+    startTimeout();
     if (m_manager->isLoading()) {
       m_manager->logger() << "waiting for load to finish";
       connect(m_manager, SIGNAL(pageFinished(bool)), this, SLOT(pendingLoadFinished(bool)));
-      startTimeout();
     } else {
       startCommand();
     }
@@ -89,13 +85,15 @@ void SocketCommand::startCommand() {
     m_pendingResponse = response;
   } else {
     disconnect(m_timer, SIGNAL(timeout()), this, SLOT(commandTimeout()));
-    disconnect(m_manager, SIGNAL(loadStarted()), this, SLOT(startTimeout()));
     m_response = response;
     m_wait_loop.quit();
   }
 }
 
 void SocketCommand::startTimeout() {
+  m_timer->setSingleShot(true);
+  connect(m_timer, SIGNAL(timeout()), this, SLOT(commandTimeout()));
+
   int timeout = m_manager->getTimeout();
   if (timeout > 0) {
     m_timer->start(timeout * 1000);
@@ -108,7 +106,6 @@ void SocketCommand::pendingLoadFinished(bool success) {
     startCommand();
   } else {
     disconnect(m_timer, SIGNAL(timeout()), this, SLOT(commandTimeout()));
-    disconnect(m_manager, SIGNAL(loadStarted()), this, SLOT(startTimeout()));
     ErrorMessage* message = new ErrorMessage(m_manager->currentPage()->failureString());
     m_response = new Response(false, message, this);
     m_wait_loop.quit();
@@ -116,7 +113,6 @@ void SocketCommand::pendingLoadFinished(bool success) {
 }
 
 void SocketCommand::commandTimeout() {
-  disconnect(m_manager, SIGNAL(loadStarted()), this, SLOT(startTimeout()));
   disconnect(m_manager, SIGNAL(pageFinished(bool)), this, SLOT(pendingLoadFinished(bool)));
   m_timedOut = true;
   m_manager->currentPage()->triggerAction(QWebPage::Stop);
@@ -132,7 +128,6 @@ void SocketCommand::pendingLoadFinishedForPageLoad(bool success) {
       m_manager->logger() << "Page load from command finished";
       if (!m_timedOut) {
         disconnect(m_timer, SIGNAL(timeout()), this, SLOT(commandTimeout()));
-        disconnect(m_manager, SIGNAL(loadStarted()), this, SLOT(startTimeout()));
 	if (success) {
 	  m_response = m_pendingResponse;
 	} else {

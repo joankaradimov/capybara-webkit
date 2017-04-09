@@ -34,6 +34,8 @@ class SocketCommand : public QObject {
     QEventLoop m_wait_loop;
 
   private:
+    void startTimeout();
+
     QStringList m_arguments;
     WebPageManager *m_manager;
     QTimer *m_timer;
@@ -44,7 +46,6 @@ class SocketCommand : public QObject {
   public slots:
     void commandTimeout();
     void pageLoadingFromCommand();
-    void startTimeout();
     void pendingLoadFinished(bool);
     void pendingLoadFinishedForPageLoad(bool success);
 };
