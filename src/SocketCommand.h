@@ -23,7 +23,6 @@ class SocketCommand : public QObject {
     const QStringList &arguments() const;
     WebPageManager *manager() const;
     virtual Response* start() = 0;
-    void startCommand();
 
     Response* finish(bool success);
     Response* finish(bool success, QString message);
