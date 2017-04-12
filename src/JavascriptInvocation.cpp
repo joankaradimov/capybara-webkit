@@ -35,9 +35,9 @@ void JavascriptInvocation::setError(QVariant error) {
 InvocationResult JavascriptInvocation::invoke(QWebFrame *frame) {
   frame->addToJavaScriptWindowObject("CapybaraInvocation", this);
   QVariant result = frame->evaluateJavaScript("Capybara.invoke()");
-  if (getError().isValid())
+  if (getError().isValid()) {
     return InvocationResult(getError(), true);
-  else {
+  } else {
     if (functionName() == "leftClick") {
       // Don't trigger the left click from JS incase the frame closes
       QVariantMap qm = result.toMap();

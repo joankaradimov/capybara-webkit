@@ -80,10 +80,11 @@ WebPage *WebPageManager::createPage() {
 void WebPageManager::removePage(WebPage *page) {
   m_pages.removeOne(page);
   page->deleteLater();
-  if (m_pages.isEmpty())
+  if (m_pages.isEmpty()) {
     createPage()->setFocus();
-  else if (page == m_currentPage)
+  } else if (page == m_currentPage) {
     m_pages.first()->setFocus();
+  }
 }
 
 void WebPageManager::emitLoadStarted() {
@@ -96,9 +97,9 @@ void WebPageManager::emitLoadStarted() {
 
 void WebPageManager::requestCreated(QByteArray &url, QNetworkReply *reply) {
   logger() << "Started request to" << url;
-  if (reply->isFinished())
+  if (reply->isFinished()) {
     replyFinished(reply);
-  else {
+  } else {
     m_pendingReplies.append(reply);
     connect(reply, SIGNAL(finished()), SLOT(handleReplyFinished()));
     connect(
