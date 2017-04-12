@@ -38,7 +38,6 @@ class SocketCommand : public QObject {
     QStringList m_arguments;
     WebPageManager *m_manager;
     QTimer *m_timer;
-    Response *m_pendingResponse;
     bool m_pageLoadingFromCommand;
     bool m_timedOut;
 

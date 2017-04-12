@@ -14,7 +14,6 @@ Response* SocketCommand::execute() {
   if (m_manager->currentPage()->isLastLoadSuccess()) {
     m_pageLoadingFromCommand = false;
     m_timedOut = false;
-    m_pendingResponse = NULL;
     m_response = NULL;
     m_timer = new QTimer(this);
 
@@ -38,16 +37,12 @@ Response* SocketCommand::execute() {
 
       disconnect(m_manager, SIGNAL(loadStarted()), this, SLOT(pageLoadingFromCommand()));
 
+      m_response = response;
       if (m_pageLoadingFromCommand) {
-	m_pendingResponse = response;
+        m_wait_loop.exec();
       } else {
-	disconnect(m_timer, SIGNAL(timeout()), this, SLOT(commandTimeout()));
-	m_response = response;
+        disconnect(m_timer, SIGNAL(timeout()), this, SLOT(commandTimeout()));
       }
-    }
-
-    if (m_response == NULL) {
-      m_wait_loop.exec();
     }
   } else {
     QString message = m_manager->currentPage()->failureString();
@@ -122,19 +117,16 @@ void SocketCommand::commandTimeout() {
 
 void SocketCommand::pendingLoadFinishedForPageLoad(bool success) {
   if (m_pageLoadingFromCommand) {
+    Q_ASSERT(m_response);
     m_pageLoadingFromCommand = false;
-    if (m_pendingResponse) {
-      m_manager->logger() << "Page load from command finished";
-      if (!m_timedOut) {
-        disconnect(m_timer, SIGNAL(timeout()), this, SLOT(commandTimeout()));
-	if (success) {
-	  m_response = m_pendingResponse;
-	} else {
-	  QString message = m_manager->currentPage()->failureString();
-	  m_response = new Response(false, new ErrorMessage(message), this);
-	}
-	m_wait_loop.quit();
+    m_manager->logger() << "Page load from command finished";
+    if (!m_timedOut) {
+      disconnect(m_timer, SIGNAL(timeout()), this, SLOT(commandTimeout()));
+      if (!success) {
+        QString message = m_manager->currentPage()->failureString();
+        m_response = new Response(false, new ErrorMessage(message), this);
       }
+      m_wait_loop.quit();
     }
   }
 }
