@@ -3,7 +3,7 @@
 class WebPageManager;
 
 class GetTimeout : public SocketCommand {
-  Q_OBJECT;
+  Q_OBJECT
 
  public:
   GetTimeout(WebPageManager *page, QStringList &arguments, QObject *parent = 0);

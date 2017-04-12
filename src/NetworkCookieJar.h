@@ -3,7 +3,7 @@
 
 class NetworkCookieJar : public QNetworkCookieJar {
 
-  Q_OBJECT;
+  Q_OBJECT
 
  public:
 

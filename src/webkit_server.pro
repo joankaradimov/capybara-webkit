@@ -1,7 +1,7 @@
 TEMPLATE = app
 TARGET = webkit_server
 DESTDIR = .
-QMAKE_CXXFLAGS += $$(CXXFLAGS)
+QMAKE_CXXFLAGS += $$(CXXFLAGS) -Wall -Wextra -Wpedantic -Werror
 QMAKE_CFLAGS += $$(CFLAGS)
 QMAKE_LFLAGS += $$(LDFLAGS)
 PROJECT_DIR = $$_PRO_FILE_PWD_

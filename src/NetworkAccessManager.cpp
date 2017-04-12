@@ -41,7 +41,7 @@ QNetworkReply* NetworkAccessManager::createRequest(
   QNetworkReply *reply =
     m_requestHandler->handleRequest(this, operation, request, outgoingData);
   return reply;
-};
+}
 
 void NetworkAccessManager::finished(QNetworkReply *reply) {
   QUrl redirectUrl = reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
